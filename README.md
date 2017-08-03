@@ -97,6 +97,8 @@ sync.js (located in scripts/) is used for updating the local databases. This scr
     */1 * * * * cd /path/to/explorer && /usr/bin/nodejs scripts/sync.js index update > /dev/null 2>&1
     */2 * * * * cd /path/to/explorer && /usr/bin/nodejs scripts/sync.js market > /dev/null 2>&1
     */5 * * * * cd /path/to/explorer && /usr/bin/nodejs scripts/peers.js > /dev/null 2>&1
+    */1 * * * * cd /path/to/explorer && sh cron_count_mempol.sh
+    */1 * * * * cd /path/to/explorer && sh cron_get_raw_mempool.sh
 
 ### Wallet
 
