@@ -27,15 +27,23 @@ html
         function update_stats(){   
           $.ajax({url: '/ext/summary', success: function(json){
             $("#supply").text(json.data[0].supply);
-            $("#difficulty").text(json.data[0].difficulty);
+            $("#difficulty").text("Difficulty " + json.data[0].difficulty);
             $("#difficultyHybrid").text(json.data[0].difficultyHybrid);
-            $("#hashrate").text(json.data[0].hashrate);
-            $("#lastPrice").text(json.data[0].lastPrice.toFixed(8));
+            $("#hashrate").text("Network PH/s " + json.data[0].hashrate);
+            $("#lastPrice").text("BTC Price " + json.data[0].lastPrice.toFixed(8));
             $("#lblConnections").text(json.data[0].connections + ' connections');
             $("#lblBlockcount").text(json.data[0].blockcount + ' blocks');
-            $("#lblX1").text(' ');
+            $("#lre").text("Best height " + json.data[0].blockcount);
+            $("#lblX1").text(' ')
           }});
         }
+
+        function update_memstats(){
+        $.ajax({url: "/stat/em.json", success: function(json){
+          $("#m_transactions").text("Mempool Txs " + json);
+          }});
+        }
+
         $('.block-last-next').tooltip({
           animation: true,
           delay: { hide: 500 },   
@@ -51,8 +59,10 @@ html
         });
         setInterval( function() {
           update_stats();
+          update_memstats();
         }, 60000);
         update_stats();
+        update_memstats();
       });
   body
     - function format_unixtime(unixtime) {
@@ -95,6 +105,25 @@ html
               a.navbar-link(href='/') 
                 span.glyphicon.glyphicon-search
                 span.menu-text #{settings.locale.menu_explorer}
+           
+            li#home
+              a.navbar-link()
+                #lre #{"Loading block"}
+
+            li#home
+              a.navbar-link(href='/mempool')
+                #m_transactions #{"Loading mempool"}
+
+            li#home
+              a.navbar-link()
+                #hashrate #{"Loading Hashrare"}
+           
+             li#home
+              a.navbar-link()
+                #difficulty #{"Loading Difficulty"}
+            li#home
+              a.navbar-link()
+                #lastPrice #{"Loading Price"}
             if settings.heavy == true
               li#reward
                 a.navbar-link(href='/reward')
@@ -120,70 +149,11 @@ html
                 a.navbar-link.loading(href='/markets/#{settings.markets.default}') 
                   span.fa.fa-line-chart
                   span.menu-text #{settings.locale.menu_markets}
-            if settings.display.api == true
-              li#info
-                a.navbar-link(href='/info')
-                  span.glyphicon.glyphicon-info-sign
-                  span.menu-text #{settings.locale.menu_api}
     .col-md-12
       .row.text-center
         .col-md-2.col-md-offset-1
-          .panel.panel-default.hidden-sm.hidden-xs
-            .panel-heading
-              if settings.nethash_units == 'K'
-                strong #{settings.locale.network} (KH/s)
-              else if settings.nethash_units == 'M'
-                strong #{settings.locale.network} (MH/s)
-              else if settings.nethash_units == 'G'
-                strong #{settings.locale.network} (GH/s)
-              else if settings.nethash_units == 'T'
-                strong #{settings.locale.network} (TH/s)
-              else if settings.nethash_units == 'P'
-                strong #{settings.locale.network} (PH/s)
-              else if settings.nethash_units == 'H'
-                strong #{settings.locale.network} (H/s)
-            .panel-body
-              if settings.index.difficulty == 'Hybrid'
-               label#hashrate - 
-               <br>
-               label#lblX1  
-              else  
-               label#hashrate - 
-        .col-md-2
-          .panel.panel-default.hidden-sm.hidden-xs
-            .panel-heading
-              strong #{settings.locale.difficulty}
-            .panel-body
-              if settings.index.difficulty == 'Hybrid'
-               label#difficulty -
-               <br>
-               label#difficultyHybrid -
-              else
-               label#difficulty -
-        .col-md-2.col-sm-12
-          img(src='#{settings.logo}', style='margin-top:-15px;height:128px;')
-        .col-md-2
-          .panel.panel-default.hidden-sm.hidden-xs
-            .panel-heading
-              strong #{settings.locale.ex_supply} (#{settings.symbol})
-            .panel-body
-              if settings.index.difficulty == 'Hybrid'
-               label#supply - 
-               <br>
-               label#lblX1
-              else
-               label#supply -  
-        .col-md-2
-          .panel.panel-default.hidden-sm.hidden-xs
-            .panel-heading
-              strong #{settings.markets.exchange} Price
-            .panel-body
-              if settings.index.difficulty == 'Hybrid'
-               label#lastPrice -
-               <br>
-               label#lblX1
-              else
-               label#lastPrice - 
+         
+            
                  
       .row.text-center(style='margin-top:10px;margin-bottom:20px;')
         form.form-inline(method='post', action='/search')      
@@ -194,10 +164,10 @@ html
     .navbar.navbar-default.navbar-fixed-bottom.hidden-xs
       .col-md-4
         if settings.display.twitter
-          ul.nav.navbar-nav
-            li.pull-left
-              a#twitter-icon(href="https://twitter.com/#{settings.twitter}", target='_blank')
-                span.glyphicon.fa.fa-twitter
+         ul.nav.navbar-nav
+          a.navbar-link.loading(href='/markets/#{settings.markets.default}')
+                  span.fa.fa-line-chart
+                  span.menu-text #{settings.locale.menu_markets}
         if settings.display.facebook
           ul.nav.navbar-nav
             li.pull-left
@@ -216,6 +186,3 @@ html
       span.connections
         label#lblBlockcount.label.label-default -
         label#lblConnections.label.label-default -
-
-
-              
