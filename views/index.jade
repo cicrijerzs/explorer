@@ -6,7 +6,7 @@ block content
       var stable = $('#block-table').dataTable( {  
         autoWidth: true,      
         searching: true,
-        ordering: false,
+        ordering: true,
         responsive: true,
         lengthChange: false,
         processing: true,
@@ -21,7 +21,7 @@ block content
           }
         },
         columns: [
-          //{ data: 'height', width: '8%' },
+          { data: 'height', width: '8%' },
           { data: 'difficulty', width: '10%' },
           //{ data: 'size', width:'10%' },
           //{ data: 'txs', width: '10%' },
@@ -34,8 +34,8 @@ block content
         searching: false,
         ordering: false,
         responsive: true,
-        lengthChange: true,
-        processing: true,
+        lengthChange: false,
+        processing: false,
         ajax: {
           url: '/ext/getlasttxs/0.00000001',
           dataSrc: function ( json ) {
@@ -58,6 +58,10 @@ block content
           { data: 'timestamp', width: '25%' },
         ]
       });
+      
+    
+
+
       setInterval( function () {
         rtable.api().ajax.reload(null, false);
         stable.api().ajax.reload(null, false);
@@ -73,8 +77,8 @@ block content
         .alert.alert-warning.alert-dismissable(role='alert')
           button.close(type='button', data-dismiss='alert') ×
           strong #{settings.locale.ex_warning} #{warning}
-  
-  .col-md-12
+ 
+  .col-md-13
     .panel.panel-default
       .panel-heading
         strong #{settings.locale.ex_latest_transactions}
@@ -88,5 +92,3 @@ block content
             th.text-center #{settings.locale.timestamp}
         tbody.text-center
     .footer-padding
-      
-              
