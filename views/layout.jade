@@ -39,7 +39,7 @@ html
         }
 
         function update_memstats(){
-        $.ajax({url: "/stat/em.json", success: function(json){
+        $.ajax({url: "em.json", success: function(json){
           $("#m_transactions").text("Mempool Txs " + json);
           }});
         }
